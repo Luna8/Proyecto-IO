@@ -1,3 +1,5 @@
+#include <queue>
+
 class Simulacion
 {
 public:
@@ -7,8 +9,8 @@ public:
   int E3;
   bool servidorOcupado =  false;
   bool unidadESOcupado = false;
-  cola colaProcesosCPU;
-  cola colaProcesosES;
+  std::queue<proceso> colaProcesosCPU;
+  std::queue<proceso> colaProcesosES;
   int quantum;
   int cantidadṔrocesos;
   int tiempoProcesos;
