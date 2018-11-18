@@ -12,8 +12,8 @@ class interfaz
         interfaz();
         virtual ~interfaz();
         void parametros();
-        void vistaSimulacion();
-        void vistaFinal();
+        void vistaSimulacion(int, int, bool, bool, int, int, int);
+        void vistaFinal(float, float, float, float, float, float);
 
     protected:
 
