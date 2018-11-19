@@ -11,6 +11,7 @@ int main(void)
 
   cInterfaz.parametros();
 
+
   for (int i = 0; i < cInterfaz.nVecesSimulacion; i++) //Veces que hace la simulacion
   {
       Simulacion cSimulacion; //Variable objeto de la clase
@@ -19,7 +20,7 @@ int main(void)
       cSimulacion.E_1 = 0;
       cSimulacion.E_2 = std::numeric_limits<int>::max();
       cSimulacion.E_3 = std::numeric_limits<int>::max();
-
+      cSimulacion.quantum = cInterfaz.quantum;
 
 
       //Inicia la simulacion
@@ -35,7 +36,7 @@ int main(void)
           {
               if ((cSimulacion.E_2 >= cSimulacion.E_1) && (cSimulacion.E_2 >= cSimulacion.E_3))//Si el evento 2 debe ocurrir
               {
-                  cSimulacion.E2(2);
+                  cSimulacion.E2(1);
                   evento = 2;
               }
               else
@@ -44,13 +45,22 @@ int main(void)
                   evento = 3;
               }
           }
-          cInterfaz.vistaSimulacion(cSimulacion.Reloj, evento, cSimulacion.servidorOcupado, cSimulacion.unidadESOcupado,
-                          cSimulacion.colaProcesosCPU.size(), cSimulacion.colaProcesosES.size(), i);
+        //  cInterfaz.vistaSimulacion(cSimulacion.Reloj, evento, cSimulacion.servidorOcupado, cSimulacion.unidadESOcupado,
+          //                cSimulacion.colaProcesosCPU.size(), cSimulacion.colaProcesosES.size(), i);
 
       }// Cuando el reloj de la simulacion llega al limite, termina
       //Aqui debe hacer los calculos para los totales, usando los totales de cSimulacion
+      float est1 = cSimulacion.tiempoProcesos/cSimulacion.cantidadProcesos;
+      float est2 = cSimulacion.tiempoCPU/cSimulacion.cantidadProcesos;
+      float est3 = est2/cSimulacion.tiempoTotal;
+      float est4 = cSimulacion.tiempoES/cSimulacion.cantidadProcesos;
+      float est5 = est1 - est2 - est4;
+      float est6 = est5/est1;
+      cInterfaz.vistaFinal(est1,est2, est3, est4, est5, est6);
+
   }
   // LLama a Vista Final para reportar los ultimos datos cuando todas las simulaciones finalicen
+  
 
   return 0;
 }

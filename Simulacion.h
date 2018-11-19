@@ -10,7 +10,7 @@ public:
     int inicioES;
     int tiempoES;
   };
-  int Reloj;
+  int Reloj = 0;
   int E_1;
   int E_2;
   int E_3;
@@ -20,8 +20,10 @@ public:
   std::queue<proceso> colaProcesosES;
   int quantum;
   int cantidadProcesos;
-  int tiempoProcesos;
-  int tiempoES;
+  double tiempoProcesos;
+  double tiempoES;
+  double tiempoCPU;
+  double tiempoTotal;
   void E1(bool normal);
   void E2(int tipo);
   void E3();

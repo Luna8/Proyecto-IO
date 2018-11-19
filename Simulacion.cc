@@ -10,8 +10,8 @@ generarAleatorios aleatorio;
 //Llegada de un nuevo proceso
 void Simulacion::E1(bool normal){
   Reloj = E_1;                 //Adelantamos el reloj
-  int x;
-  int interrupcion;
+  double x;
+  double interrupcion;
   int tipo;
   p = proceso();    //Creamos proceso
   p.horaInicio =  Reloj;
@@ -20,9 +20,9 @@ void Simulacion::E1(bool normal){
   }else{
     p.inicioCPU =  Reloj;           //Si no está ocupado el servidor
     interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
-    if (interrupcion>=50) {     // Caso en que ocurre una interrupcion
+    if (interrupcion>=0.50) {     // Caso en que ocurre una interrupcion
       x = aleatorio.generarTiempoOcurrencia(quantum);
-      if(interrupcion <=70){  //Caso en que se va a E/S
+      if(interrupcion <=0.70){  //Caso en que se va a E/S
         tipo = 3;
       }
       else{               //Caso en que sale del sistema
@@ -45,18 +45,20 @@ void Simulacion::E2(int tipo) {
           if(unidadESOcupado==true){    //Revisamos si está ocupado
               colaProcesosES.push(p);
           }else{
-              int y= aleatorio.generarTiempoES();    //Si no está ocupado genera tiempo
+              double y= aleatorio.generarTiempoES();    //Si no está ocupado genera tiempo
+              p.inicioES = Reloj;
               E_3=Reloj+y;             //Y mueve el reloj
+
           }
       }
   if(colaProcesosCPU.size()>0){ //Si hay procesos en cola
     colaProcesosCPU.pop();
-    int interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
+    double interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
     int tipo;
-    int x;
-    if (interrupcion>=50) {     // Caso en que ocurre una interrupcion
+    double x;
+    if (interrupcion>=0.50) {     // Caso en que ocurre una interrupcion
       x = aleatorio.generarTiempoOcurrencia(quantum);
-      if(interrupcion <=70){  //Caso en que se va a E/S
+      if(interrupcion <=0.70){  //Caso en que se va a E/S
         tipo = 3;
       }
       else{               //Caso en que sale del sistema
@@ -73,12 +75,12 @@ void Simulacion::E2(int tipo) {
           }
     }else{
             if(tipo==1){
-              int interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
+              double interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
               int tipo;
-              int x;
-              if (interrupcion>=50) {     // Caso en que ocurre una interrupcion
+              double x;
+              if (interrupcion>=0.50) {     // Caso en que ocurre una interrupcion
                 x = aleatorio.generarTiempoOcurrencia(quantum);
-                if(interrupcion <=70){  //Caso en que se va a E/S
+                if(interrupcion <=0.70){  //Caso en que se va a E/S
                   tipo = 3;
                 }
                 else{               //Caso en que sale del sistema
@@ -91,7 +93,6 @@ void Simulacion::E2(int tipo) {
               }
               E_2 = Reloj + x;
 
-
             }else{
               servidorOcupado = false;
             }
@@ -102,7 +103,7 @@ void Simulacion::E2(int tipo) {
             // aumentar número de procesos
             tiempoProcesos = tiempoProcesos + (Reloj-p.inicioCPU);
             cantidadProcesos++;
-
+            tiempoTotal = Reloj;
         }
 }
 
@@ -114,12 +115,12 @@ void Simulacion::E3(){
         colaProcesosCPU.push(p);
     }else{
         p.inicioCPU = Reloj;
-        int interrupcion = aleatorio.generarInterrupcion();
-        int x;
+        double interrupcion = aleatorio.generarInterrupcion();
+        double x;
         int tipo;
-        if(interrupcion >= 50){
+        if(interrupcion >= 0.50){
             x = aleatorio.generarTiempoOcurrencia(quantum);
-            if(interrupcion <=70){  //Caso en que se va a E/S
+            if(interrupcion <=0.70){  //Caso en que se va a E/S
               tipo = 3;
             }
             else{               //Caso en que sale del sistema
@@ -132,6 +133,7 @@ void Simulacion::E3(){
         }
         E_2 = Reloj + x;
         p.tiempoCPU += Reloj-p.inicioCPU;
+        tiempoCPU += p.tiempoCPU;
         E2(tipo); // {1=>'nada', 2=>'termina', 3=>'E/S'}
     }
     if(colaProcesosES.size()>0){
@@ -141,5 +143,7 @@ void Simulacion::E3(){
         unidadESOcupado=false;
         //almacenar estadísticas
         //almacenar tiempo en ES
+        p.tiempoES = Reloj-p.inicioES;
+        tiempoES += p.tiempoES;
     }
 }
