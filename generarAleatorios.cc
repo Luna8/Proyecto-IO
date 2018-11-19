@@ -1,8 +1,9 @@
 #include <iostream>
 #include "generarAleatorios.h"
+#include <math.h>
 
 using namespace std;
-
+/*
 double generarAleatorios::generarSiguienteArribo(bool normal){
   double result;
   if(normal){
@@ -34,3 +35,4 @@ double generarAleatorios::generarTiempoES(){
   double x = 1/((double)rand()%100 + 1);
   return 20*root(3x+1);
 }
+*/
