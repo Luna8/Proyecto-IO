@@ -80,3 +80,43 @@ bool interfaz::valiDarDato(string dato, int nDato){
     }
     return validar;
 }
+
+void interfaz::vistaSimulacion(int reloj, int evento, bool estProcesador, bool estES, int tamColaProc, int tamColaES, int progFin){
+    string eventoProcesador;
+    string estadoProcesador;
+    string estadoES;
+    switch(evento) {
+        case 1 : eventoProcesador="Programa se queda sin tiempo de ejecucion";
+        case 2 : eventoProcesador="Programa termina";
+        case 3 : eventoProcesador="Programa pasa a dispositivo de E/S";
+    }
+    if(estProcesador){
+        estadoProcesador="OCUPADO";
+    }else{
+        estadoProcesador="LIBRE";
+    }
+    if(estES){
+        estadoES="OCUPADO";
+    }else{
+        estadoES="LIBRE";
+    }
+    cout<<"********************************************************************************"<<endl;
+    cout<<"Reloj del sistema: "<<reloj<<endl;
+    cout<<"Evento que procesa: "<<eventoProcesador<<endl;
+    cout<<"Estado Procesador: "<<estadoProcesador<<endl;
+    cout<<"Estado E/S: "<<estadoES<<endl;
+    cout<<"Numero de programas en cola del procesador: "<<tamColaProc<<endl;
+    cout<<"Numero de programas en cola del E/S: "<<tamColaES<<endl;
+    cout<<"Numero de programas que han salido: "<<progFin<<endl;
+    cout<<""<<endl;
+}
+
+void interfaz::vistaFinal(float promedioTotal, float promedioProgramaCPU, float ocupacionServidor, float promedioProgramaES, float tiempoCola, float coeficienteEficiencia){
+    cout<<"*********************Estadisticas Finales*********************"<<endl;
+    cout<<"Tiempo promedio de un programa en el sistema: "<<promedioTotal<<endl;
+    cout<<"Tiempo promedio de un programa en el CPU: "<<promedioProgramaCPU<<endl;
+    cout<<"Porcentaje de ocupacion del servidor: "<<ocupacionServidor<<endl;
+    cout<<"Tiempo promedio de un programa en E/S: "<<promedioProgramaES<<endl;
+    cout<<"Tiempo promedio de un programa en las colas: "<<tiempoCola<<endl;
+    cout<<"Coeficiente de eficiencia: "<<coeficienteEficiencia<<endl;
+}
