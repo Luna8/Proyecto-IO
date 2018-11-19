@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <limits>
 
-#include "simulacion.h"
 using namespace std;
 
 class interfaz
@@ -17,17 +17,17 @@ class interfaz
         void vistaSimulacion(int, int, bool, bool, int, int, int);
         void vistaFinal(float, float, float, float, float, float);
 
-        int main();
+
+            int nVecesSimulacion;
+            int tiempoTotal;
+            int quantum;
+            bool distribucionExponencial;
+            bool valiDarDato(string,int);
 
     protected:
 
     private:
 
-    int nVecesSimulacion;
-    int tiempoTotal;
-    int quantum;
-    bool distribucionExponencial;
-    bool valiDarDato(string,int);
 };
 
 #endif // INTERFAZ_H
