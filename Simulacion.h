@@ -16,12 +16,14 @@ struct proceso{
   int tiempoCPU;
   int inicioES;
   int tiempoES;
+  int tipoInt;
   proceso(int hi = 0){
     horaInicio = hi;
     inicioCPU = 0;
     tiempoCPU = 0;
     inicioES = 0;
     tiempoES = 0;
+    tipoInt = 0;
   }
 };
 
@@ -30,7 +32,7 @@ class Simulacion{
     Simulacion();
     virtual ~Simulacion();
     void E1(bool exponencial);
-    void E2(int tipo);
+    void E2();
     void E3();
     void establecerReloj(int t);
     void establecerE_1(int E1);
