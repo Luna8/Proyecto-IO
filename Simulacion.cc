@@ -92,26 +92,24 @@ queue<proceso*> Simulacion::obtenerColaProcesosES(){
 
 //Llegada de un nuevo proceso
 void Simulacion::E1(bool normal){
-  Reloj = E_1;                                              //Adelantamos el reloj
-  double x;
-  double interrupcion;
+  Reloj = E_1;                                              // Adelantamos el reloj
+  double x;                                                 // tiempo de ocurrencia
+  double interrupcion;                                      // tipo de interrupción
   int tipo;
-  proceso * p = new proceso(Reloj);                         //Creamos proceso
-  if(servidorOcupado){                                      //Si está ocupado el servidor
-    colaProcesosCPU.push(p);                                //se va a la cola.
-  }else{                                                    //Si no está ocupado el servidor
+  proceso * p = new proceso(Reloj);                         // Creamos proceso
+  if(servidorOcupado){                                      // Si está ocupado el servidor
+    colaProcesosCPU.push(p);                                // se va a la cola.
+  }else{                                                    // Si no está ocupado el servidor
     p->inicioCPU =  Reloj;           
-    interrupcion = aleatorio.generarInterrupcion();         //Generamos valor aleatorio
-    if (interrupcion>=0.50) {                               //Caso en que ocurre una interrupcion
+    interrupcion = aleatorio.generarInterrupcion();         // Generamos valor aleatorio
+    if (interrupcion>=0.50) {                               // Caso en que ocurre una interrupcion
+      if(interrupcion < 0.70) tipo = 3;                     // Caso en que se va a E/S
+      else tipo = 2;                                       // Caso en que sale del sistema
       x = aleatorio.generarTiempoOcurrencia(quantum);
-      if(interrupcion < 0.70){                              //Caso en que se va a E/S
-        tipo = 3;
-      }else{                                                //Caso en que sale del sistema
-        tipo = 2;
-      }
-    }else{                                                  //Caso en que no ocurren interrupción
-      x = quantum;
+    }else{                                                  // Caso en que no ocurren interrupción
       tipo = 1;
+      x = quantum;
+      
       colaProcesosCPU.push(p);
     }
     E_2 = Reloj + x;
@@ -184,7 +182,7 @@ void Simulacion::E2(int tipo) {
             //almacenar estadísticas
             // almacenar duración del proceso
             // aumentar número de procesos
-            tiempoProcesos = tiempoProcesos + (Reloj-p.inicioCPU);
+            tiempoProcesos = tiempoProcesos + (Reloj-p->inicioCPU);
             cantidadProcesos++;
             tiempoTotal = Reloj;
         }
