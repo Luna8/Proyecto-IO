@@ -27,14 +27,14 @@ int main(void)
       while (cSimulacion.Reloj <= cInterfaz.tiempoTotal)
       {
           int evento = 0;
-          if ((cSimulacion.E_1 >= cSimulacion.E_2) && (cSimulacion.E_1 >= cSimulacion.E_3)) //Si el evento 1 debe ocurrir
+          if ((cSimulacion.E_1 <= cSimulacion.E_2) && (cSimulacion.E_1 <= cSimulacion.E_3)) //Si el evento 1 debe ocurrir
           {
               cSimulacion.E1(!(cInterfaz.distribucionExponencial));
               evento = 1;
           }
           else
           {
-              if ((cSimulacion.E_2 >= cSimulacion.E_1) && (cSimulacion.E_2 >= cSimulacion.E_3))//Si el evento 2 debe ocurrir
+              if ((cSimulacion.E_2 <= cSimulacion.E_1) && (cSimulacion.E_2 <= cSimulacion.E_3))//Si el evento 2 debe ocurrir
               {
                   cSimulacion.E2(1);
                   evento = 2;
