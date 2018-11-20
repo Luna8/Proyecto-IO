@@ -102,7 +102,7 @@ void Simulacion::E1(bool exponencial){ Reloj = E_1;
   if(!servidorOcupado){                                                                                          
     servidorOcupado = true;
     p->inicioCPU = Reloj;
-    
+
     double x = quantum;                                     // Tiempo de ocurrencia
     double interrupcion = aleatorio.generarInterrupcion();
     if (interrupcion>=0.50){                                // Caso en que ocurre una interrupción
@@ -122,31 +122,27 @@ void Simulacion::E2(){ Reloj = E_2;
   proceso * p = colaProcesosCPU.front();                    // proceso por atender
   colaProcesosCPU.pop();                                    // lo saca de la cola
   if(colaProcesosCPU.empty){
-    servidorOcupado = false;
+    servidorOcupado = false;                                // no hay más procesos en cola
   }
 
   if(p->tipoInt == 3){                                      // Si es el caso E/S
     if(!unidadESOcupado){     
-      servidorOcupado = false;
-      unidadESOcupado = true;
-      p->inicioES = Reloj;                                                 
+      unidadESOcupado = true;                                 
       double y = aleatorio.generarTiempoES();               //Si no está ocupado genera tiempo
-      E_3 = Reloj + y;              
-      p->tiempoES += E_3 - p->inicioES;                         
+      E_3 = Reloj + y;                                     
     }
     colaProcesosES.push(p);
-  }else if(p->tipoInt == 2){
-      servidorOcupado = false;
+    servidorOcupado = false;                                // El proceso cambió de cola
+  }else if(p->tipoInt == 2){                                // Si es el caso termina
       cantidadProcesos ++ ;
       tiempoProcesos += Reloj - p->horaInicio;
       tiempoES += p->tiempoES;
       tiempoCPU += p->tiempoCPU;
-      servidorOcupado = false;
-  }else{
+      servidorOcupado = false;                              // el proceso salió del sistema
+  }else{                                                    // Si debe volver a la cola
     if(!servidorOcupado){                                                                                          
       servidorOcupado = true;
       p->inicioCPU = Reloj;
-
       double x = quantum;                                     // Tiempo de ocurrencia
       double interrupcion = aleatorio.generarInterrupcion();
       if (interrupcion>=0.50){                                // Caso en que ocurre una interrupción
@@ -159,102 +155,33 @@ void Simulacion::E2(){ Reloj = E_2;
     }
     colaProcesosCPU.push(p);
   }
-  
-  if(colaProcesosCPU.size()>0){ //Si hay procesos en cola
-    
-    double interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
-    int tipo;
-    double x;
-    if (interrupcion>=0.50) {     // Caso en que ocurre una interrupcion
-      x = aleatorio.generarTiempoOcurrencia(quantum);
-      if(interrupcion <=0.70){  //Caso en que se va a E/S
-        tipo = 3;
-      }
-      else{               //Caso en que sale del sistema
-        tipo = 2;
-      }
-      }else{                      //Caso en que no ocurren interrupción
-        x = quantum;
-        tipo = 1;
-        colaProcesosCPU.push(p);
-    }
-    E_2 = Reloj + x;
-    if(tipo==1){
-              colaProcesosCPU.push(p);
-          }
-    }else{
-            if(tipo==1){
-              double interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio
-              int tipo;
-              double x;
-              if (interrupcion>=0.50) {     // Caso en que ocurre una interrupcion
-                x = aleatorio.generarTiempoOcurrencia(quantum);
-                if(interrupcion <=0.70){  //Caso en que se va a E/S
-                  tipo = 3;
-                }
-                else{               //Caso en que sale del sistema
-                  tipo = 2;
-                }
-              }else{                      //Caso en que no ocurren interrupción
-                x = quantum;
-                tipo = 1;
-                colaProcesosCPU.push(p);
-              }
-              E_2 = Reloj + x;
-
-            }else{
-              servidorOcupado = false;
-            }
-        }
-        if(tipo==2){
-            //almacenar estadísticas
-            // almacenar duración del proceso
-            // aumentar número de procesos
-            tiempoProcesos = tiempoProcesos + (Reloj-p->inicioCPU);
-            cantidadProcesos++;
-            tiempoTotal = Reloj;
-        }
 }
 
-void Simulacion::E3(){
-    Reloj = E_3;
-    proceso * p = colaProcesosES.front();
-    colaProcesosES.pop();
-    //como todos regresan al procesador luego de terminar E/S, hacen losmo que E1, sin generar un
-    //nuevo proceso.
-    if(servidorOcupado){
-        colaProcesosCPU.push(p);
-    }else{
-        p->inicioCPU = Reloj;
-        double interrupcion = aleatorio.generarInterrupcion();
-        double x;
-        int tipo;
-        if(interrupcion >= 0.50){
-            x = aleatorio.generarTiempoOcurrencia(quantum);
-            if(interrupcion <=0.70){  //Caso en que se va a E/S
-              tipo = 3;
-            }
-            else{               //Caso en que sale del sistema
-              tipo = 2;
-            }
-        }else{
-            x = quantum;
-            tipo = 1;
-            colaProcesosCPU.push(p);
-        }
-        E_2 = Reloj + x;
-        p->tiempoCPU += Reloj-p->inicioCPU;
-        tiempoCPU += p->tiempoCPU;
-        E2(tipo); // {1=>'nada', 2=>'termina', 3=>'E/S'}
+void Simulacion::E3(){ Reloj = E_3;
+  proceso * p = colaProcesosES.front();
+  colaProcesosES.pop();
+  p->inicioES = Reloj;                                                 
+  double y = aleatorio.generarTiempoES();               
+  E_3 = Reloj + y;              
+  p->tiempoES += E_3 - p->inicioES;                         
+  unidadESOcupado = false;
+  
+  if(colaProcesosCPU.empty){
+    servidorOcupado = false;                                // no hay más procesos en cola
+  }
+
+  if(!servidorOcupado){                                                                                          
+    servidorOcupado = true;
+    p->inicioCPU = Reloj;
+    double x = quantum;                                     // Tiempo de ocurrencia
+    double interrupcion = aleatorio.generarInterrupcion();
+    if (interrupcion>=0.50){                                // Caso en que ocurre una interrupción
+      p->tipoInt = (interrupcion < 0.70)?  3 : 2;           //  3 => E/S, 2 => termina.
+      x = aleatorio.generarTiempoOcurrencia(quantum);       // tiempo en el que ocurre la interrupción
     }
-    if(colaProcesosES.size()>0){
-        colaProcesosES.pop();
-        E_3=Reloj+aleatorio.generarTiempoES();
-    }else{
-        unidadESOcupado=false;
-        //almacenar estadísticas
-        //almacenar tiempo en ES
-        p->tiempoES = Reloj-p->inicioES;
-        tiempoES += p->tiempoES;
-    }
+    
+    E_2 = Reloj + x;                                        
+    p->tiempoCPU += E_2 - p->inicioCPU;                  
+  }
+  colaProcesosCPU.push(p);
 }
