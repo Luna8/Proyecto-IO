@@ -1,8 +1,10 @@
-#include <iostream>
 #include "generarAleatorios.h"
-#include <math.h>
 
-using namespace std;
+generarAleatorios::generarAleatorios(){
+  srand(time(NULL));
+}
+  
+generarAleatorios::~generarAleatorios(){}
 
 double generarAleatorios::generarSiguienteArribo(bool normal){
   double result;

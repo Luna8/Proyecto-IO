@@ -1,12 +1,95 @@
-#include <iostream>
 #include "Simulacion.h"
-#include "generarAleatorios.h"
-#include  <cstdlib>
 
+Simulacion::Simulacion(){
+  Reloj = 0;
+  E_1 = 0;
+  E_2 = numeric_limits<int>::max();
+  E_3 = numeric_limits<int>::max();
+  servidorOcupado =  false;
+  unidadESOcupado = false;
+}
 
-using namespace std;
+Simulacion::~Simulacion(){}
 
-generarAleatorios aleatorio;
+void Simulacion::establecerReloj(int t){
+  Reloj = t;
+}
+void Simulacion::establecerE_1(int E1){
+  E_1 = E1;
+}
+void Simulacion::establecerE_2(int E2){    
+  E_2 = E2;
+}
+void Simulacion::establecerE_3(int E3){    
+  E_3 = E3;
+}
+void Simulacion::establecerServidorOcupado(bool o){    
+  servidorOcupado = o;
+}
+void Simulacion::establecerUnidadESOcupado(bool o){    
+  unidadESOcupado = o;
+}
+void Simulacion::establecerQuantum(int q){
+  quantum = q;
+}
+void Simulacion::establecerCantidadProcesos(int n){    
+  cantidadProcesos = n;
+}
+void Simulacion::establecerTiempoProcesos(double t){    
+  tiempoProcesos = t;
+}
+void Simulacion::establecerTiempoES(double t){    
+  tiempoES = t;
+}
+void Simulacion::establecerTiempoCPU(double t){    
+  tiempoCPU = t;
+}
+void Simulacion::establecerTiempoTotal(double t){    
+  tiempoTotal = t;
+}
+int Simulacion::obtenerReloj(){    
+  return Reloj;
+}
+int Simulacion::obtenerE_1(){    
+  return E_1;
+}
+int Simulacion::obtenerE_2(){    
+  return E_2;
+}
+int Simulacion::obtenerE_3(){    
+  return E_3;
+}
+bool Simulacion::obtenerServidorOcupado(){    
+  return servidorOcupado;
+}
+bool Simulacion::obtenerUnidadESOcupado(){    
+  return unidadESOcupado;
+}
+int Simulacion::obtenerQuantum(){    
+  return quantum;
+}
+int Simulacion::obtenerCantidadProcesos(){    
+  return cantidadProcesos;
+}
+double Simulacion::obtenerTiempoProcesos(){    
+  return tiempoProcesos;
+}
+double Simulacion::obtenerTiempoES(){    
+  return tiempoES;
+}
+double Simulacion::obtenerTiempoCPU(){    
+  return  tiempoCPU;
+}
+double Simulacion::obtenerTiempoTotal(){    
+  return tiempoTotal;
+}
+queue<proceso> Simulacion::obtenerColaProcesoCPU(){    
+  return colaProcesosCPU;
+}
+queue<proceso> Simulacion::obtenerColaProcesosES(){    
+  return colaProcesosES;
+}
+
 //Llegada de un nuevo proceso
 void Simulacion::E1(bool normal){
   Reloj = E_1;                 //Adelantamos el reloj
