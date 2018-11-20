@@ -95,37 +95,45 @@ queue<proceso*> Simulacion::obtenerColaProcesosES(){
 void Simulacion::E1(bool exponencial){
   Reloj = E_1;                                              // Adelantamos el reloj
   proceso * p = new proceso(Reloj);                         
-  if(servidorOcupado){                                      
-    colaProcesosCPU.push(p);                                
-  }else{                                                    
+  if(!servidorOcupado){                                                                                          
+    servidorOcupado = true;
+    
+    p->inicioCPU = Reloj;
+
     double x = quantum;                                     // Tiempo de ocurrencia
-    p->inicioCPU =  Reloj;
     double interrupcion = aleatorio.generarInterrupcion();
     if (interrupcion>=0.50){                                // Caso en que ocurre una interrupción
-      if(interrupcion < 0.70) p->tipoInt = 3;                 // * interrupción E/S
-      else p->tipoInt = 2;                                    // * interrupción sale del sistema
+      p->tipoInt = (interrupcion < 0.70)?  3 : 2;           //  3 => E/S, 2 => termina.
       x = aleatorio.generarTiempoOcurrencia(quantum);       // tiempo en el que ocurre la interrupción
-    }else p->tipoInt = 1;                                   // Caso en que no ocurre interrupción
-    p->tiempoCPU += Reloj + x - p->inicioCPU;
-    colaProcesosCPU.push(p);                                // Proceso entra a la cola por Round Robin o por interrupción
-    E_2 = Reloj + x;
+    }
+    
     E_1 = Reloj + aleatorio.generarSiguienteArribo(exponencial);
+    E_2 = Reloj + x;
+
+    p->tiempoCPU += E_2 - p->inicioCPU;                  
   }
+  colaProcesosCPU.push(p); // Proceso entra a la cola por Round Robin, o por interrupción, o por no tener campo
 }
 
 void Simulacion::E2() {
-  Reloj =  E_2;                                             // Adelantamos el reloj
+  Reloj = E_2;                                             // Adelantamos el reloj
+
   proceso * p = colaProcesosCPU.front();                    // proceso por atender
   colaProcesosCPU.pop();                                    // lo saca de la cola
-  if(p->tipoInt == 3){                                        // Si es el caso E/S
-    if(unidadESOcupado){                                    
-      colaProcesosES.push(p);                               
-    }else{                                                      
+  
+  if(p->tipoInt == 3){                                      // Si es el caso E/S
+    if(!unidadESOcupado){     
+
+      p->inicioES = Reloj;                                                 
+      
       double y = aleatorio.generarTiempoES();               //Si no está ocupado genera tiempo
-      p->inicioES = Reloj;
-      E_3=Reloj+y;             //Y mueve el reloj
+      E_3= Reloj + y;              
+
+      p->tiempoES = E_3 - p->inicioES;                         
     }
+    colaProcesosES.push(p);
   }
+  
   if(colaProcesosCPU.size()>0){ //Si hay procesos en cola
     
     double interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio

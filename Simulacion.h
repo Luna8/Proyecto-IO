@@ -23,7 +23,7 @@ struct proceso{
     tiempoCPU = 0;
     inicioES = 0;
     tiempoES = 0;
-    tipoInt = 0;
+    tipoInt = 1;
   }
 };
 
