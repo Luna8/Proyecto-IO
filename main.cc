@@ -9,19 +9,15 @@ int main(void)
   int n = cInterfaz.obtenerVecesSimulacion();//Veces que hace la simulacion
   for (int i = 0; i < n; i++){ 
     //Inicia los relojes
-    cSimulacion.E_1 = 0;
-    cSimulacion.E_2 = numeric_limits<int>::max();
-    cSimulacion.E_3 = numeric_limits<int>::max();
-    cSimulacion.quantum = cInterfaz.obtenerQuantum();
-
+    cSimulacion.establecerQuantum(cInterfaz.obtenerQuantum());
 
     //Inicia la simulacion
-    while (cSimulacion.Reloj <= cInterfaz.obtenerTiempoTotal()){
+    while (cSimulacion.obtenerReloj() <= cInterfaz.obtenerTiempoTotal()){
       int evento = 0;
-      if ((cSimulacion.E_1 <= cSimulacion.E_2) && (cSimulacion.E_1 <= cSimulacion.E_3)){ //Si el evento 1 debe ocurrir
+      if ((cSimulacion.obtenerE_1() <= cSimulacion.obtenerE_2()) && (cSimulacion.obtenerE_1() <= cSimulacion.obtenerE_3())){ //Si el evento 1 debe ocurrir
         cSimulacion.E1(!(cInterfaz.obtenerDistribucion()));
         evento = 1;
-      }else if ((cSimulacion.E_2 <= cSimulacion.E_1) && (cSimulacion.E_2 <= cSimulacion.E_3)){//Si el evento 2 debe ocurrir
+      }else if ((cSimulacion.obtenerE_2() <= cSimulacion.obtenerE_1()) && (cSimulacion.obtenerE_2() <= cSimulacion.obtenerE_3())){//Si el evento 2 debe ocurrir
         cSimulacion.E2(1);
         evento = 2;
       }else{
@@ -35,10 +31,10 @@ int main(void)
      
   }
   //Aqui debe hacer los calculos para los totales, usando los totales de cSimulacion
-  float est1 = cSimulacion.tiempoProcesos/cSimulacion.cantidadProcesos;
-  float est2 = cSimulacion.tiempoCPU/cSimulacion.cantidadProcesos;
-  float est3 = est2/cSimulacion.tiempoTotal;
-  float est4 = cSimulacion.tiempoES/cSimulacion.cantidadProcesos;
+  float est1 = cSimulacion.obtenerTiempoProcesos()/cSimulacion.obtenerCantidadProcesos();
+  float est2 = cSimulacion.obtenerTiempoCPU()/cSimulacion.obtenerCantidadProcesos();
+  float est3 = est2/cSimulacion.obtenerTiempoTotal();
+  float est4 = cSimulacion.obtenerTiempoES()/cSimulacion.obtenerCantidadProcesos();
   float est5 = est1 - est2 - est4;
   float est6 = est5/est1;
   cInterfaz.vistaFinal(est1,est2, est3, est4, est5, est6);
