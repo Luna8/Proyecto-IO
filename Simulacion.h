@@ -61,13 +61,15 @@ class Simulacion{
     queue<proceso*> obtenerColaProcesoCPU();
     queue<proceso*> obtenerColaProcesosES();
   private:
+    int quantum;
+
     int Reloj;
     int E_1;
     int E_2;
     int E_3;
     bool servidorOcupado =  false;
     bool unidadESOcupado = false;
-    int quantum;
+
     int cantidadProcesos;
     double tiempoProcesos;
     double tiempoES;
