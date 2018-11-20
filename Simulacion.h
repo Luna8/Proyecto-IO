@@ -56,8 +56,8 @@ class Simulacion{
     double obtenerTiempoES();
     double obtenerTiempoCPU();
     double obtenerTiempoTotal();
-    queue<proceso> obtenerColaProcesoCPU();
-    queue<proceso> obtenerColaProcesosES();
+    queue<proceso*> obtenerColaProcesoCPU();
+    queue<proceso*> obtenerColaProcesosES();
   private:
     int Reloj;
     int E_1;
@@ -72,8 +72,8 @@ class Simulacion{
     double tiempoCPU;
     double tiempoTotal;
 
-    queue<proceso> colaProcesosCPU;
-    queue<proceso> colaProcesosES;
+    queue<proceso*> colaProcesosCPU;
+    queue<proceso*> colaProcesosES;
 
     generarAleatorios aleatorio;
 };
