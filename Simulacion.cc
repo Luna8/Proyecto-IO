@@ -121,7 +121,7 @@ void Simulacion::E2(){ Reloj = E_2;
   
   proceso * p = colaProcesosCPU.front();                    // proceso por atender
   colaProcesosCPU.pop();                                    // lo saca de la cola
-  if(colaProcesosCPU.empty){
+  if(colaProcesosCPU.empty()){
     servidorOcupado = false;                                // no hay más procesos en cola
   }
 
@@ -166,7 +166,7 @@ void Simulacion::E3(){ Reloj = E_3;
   p->tiempoES += E_3 - p->inicioES;                         
   unidadESOcupado = false;
   
-  if(colaProcesosCPU.empty){
+  if(colaProcesosCPU.empty()){
     servidorOcupado = false;                                // no hay más procesos en cola
   }
 

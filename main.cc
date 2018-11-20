@@ -18,7 +18,7 @@ int main(void)
         cSimulacion.E1(cInterfaz.obtenerDistribucion());
         evento = 1;
       }else if ((cSimulacion.obtenerE_2() <= cSimulacion.obtenerE_1()) && (cSimulacion.obtenerE_2() <= cSimulacion.obtenerE_3())){//Si el evento 2 debe ocurrir
-        cSimulacion.E2(1);
+        cSimulacion.E2();
         evento = 2;
       }else{
         cSimulacion.E3(); //Si el evento 3 debe ocurrir
