@@ -91,47 +91,45 @@ queue<proceso*> Simulacion::obtenerColaProcesosES(){
 }
 
 //Llegada de un nuevo proceso
-void Simulacion::E1(bool normal){
+void Simulacion::E1(bool exponencial){
   Reloj = E_1;                                              // Adelantamos el reloj
-  double x;                                                 // tiempo de ocurrencia
-  double interrupcion;                                      // tipo de interrupción
-  int tipo;
-  proceso * p = new proceso(Reloj);                         // Creamos proceso
-  if(servidorOcupado){                                      // Si está ocupado el servidor
-    colaProcesosCPU.push(p);                                // se va a la cola.
-  }else{                                                    // Si no está ocupado el servidor
-    p->inicioCPU =  Reloj;           
-    interrupcion = aleatorio.generarInterrupcion();         // Generamos valor aleatorio
-    if (interrupcion>=0.50) {                               // Caso en que ocurre una interrupcion
-      if(interrupcion < 0.70) tipo = 3;                     // Caso en que se va a E/S
-      else tipo = 2;                                       // Caso en que sale del sistema
-      x = aleatorio.generarTiempoOcurrencia(quantum);
-    }else{                                                  // Caso en que no ocurren interrupción
-      tipo = 1;
+  int tipo;                                                 // Tipo de interrupción
+  proceso * p = new proceso(Reloj);                         
+  if(servidorOcupado){                                      
+    colaProcesosCPU.push(p);                                
+  }else{                                                    
+    double x;                                               // Tiempo de ocurrencia
+    p->inicioCPU =  Reloj;
+    double interrupcion = aleatorio.generarInterrupcion();
+    if (interrupcion>=0.50){                                // Caso en que ocurre una interrupción
+      if(interrupcion < 0.70) tipo = 3;                       //* interrupción E/S
+      else tipo = 2;                                          //* interrupción sale del sistema
+      x = aleatorio.generarTiempoOcurrencia(quantum);       // tiempo en el que ocurre la interrupción
+    }else{                                                  // Caso en que no ocurre interrupción
+      tipo = 1;                                             
       x = quantum;
-      
-      colaProcesosCPU.push(p);
+      colaProcesosCPU.push(p);                              // Proceso entra a la cola por Round Robin
     }
     E_2 = Reloj + x;
     p->tiempoCPU += Reloj - p->inicioCPU;
+    E_1 = Reloj + aleatorio.generarSiguienteArribo(exponencial);
     E2(tipo);
   }
 }
 
 void Simulacion::E2(int tipo) {
-  Reloj =  E_2;                      //Movemos reloj.
-  proceso * p = colaProcesosCPU.front();
-  colaProcesosCPU.pop();
-  if(tipo==3){                       //Si es el caso E/S
-          if(unidadESOcupado){    //Revisamos si está ocupado
-              colaProcesosES.push(p);
-          }else{
-              double y= aleatorio.generarTiempoES();    //Si no está ocupado genera tiempo
-              p->inicioES = Reloj;
-              E_3=Reloj+y;             //Y mueve el reloj
-
-          }
-      }
+  Reloj =  E_2;                                             // Adelantamos el reloj
+  proceso * p = colaProcesosCPU.front();                    // proceso por atender
+  colaProcesosCPU.pop();                                    // lo saca de la cola
+  if(tipo==3){                                              // Si es el caso E/S
+    if(unidadESOcupado){                                    
+      colaProcesosES.push(p);                               
+    }else{                                                      
+      double y= aleatorio.generarTiempoES();    //Si no está ocupado genera tiempo
+      p->inicioES = Reloj;
+      E_3=Reloj+y;             //Y mueve el reloj
+    }
+  }
   if(colaProcesosCPU.size()>0){ //Si hay procesos en cola
     
     double interrupcion = aleatorio.generarInterrupcion(); //Generamos valor aleatorio

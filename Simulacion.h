@@ -29,7 +29,7 @@ class Simulacion{
   public:
     Simulacion();
     virtual ~Simulacion();
-    void E1(bool normal);
+    void E1(bool exponencial);
     void E2(int tipo);
     void E3();
     void establecerReloj(int t);

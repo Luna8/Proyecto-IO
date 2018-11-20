@@ -15,7 +15,7 @@ int main(void)
     while (cSimulacion.obtenerReloj() <= cInterfaz.obtenerTiempoTotal()){
       int evento = 0;
       if ((cSimulacion.obtenerE_1() <= cSimulacion.obtenerE_2()) && (cSimulacion.obtenerE_1() <= cSimulacion.obtenerE_3())){ //Si el evento 1 debe ocurrir
-        cSimulacion.E1(!(cInterfaz.obtenerDistribucion()));
+        cSimulacion.E1(cInterfaz.obtenerDistribucion());
         evento = 1;
       }else if ((cSimulacion.obtenerE_2() <= cSimulacion.obtenerE_1()) && (cSimulacion.obtenerE_2() <= cSimulacion.obtenerE_3())){//Si el evento 2 debe ocurrir
         cSimulacion.E2(1);
@@ -30,7 +30,7 @@ int main(void)
       
      
   }
-  //Aqui debe hacer los calculos para los totales, usando los totales de cSimulacion
+  //Aqui dewqbe hacer los calculos para los totales, usando los totales de cSimulacion
   float est1 = cSimulacion.obtenerTiempoProcesos()/cSimulacion.obtenerCantidadProcesos();
   float est2 = cSimulacion.obtenerTiempoCPU()/cSimulacion.obtenerCantidadProcesos();
   float est3 = est2/cSimulacion.obtenerTiempoTotal();
