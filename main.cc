@@ -8,6 +8,12 @@
 int main(void)
 {
   interfaz cInterfaz;
+  float est1Total;
+  float est2Total;
+  float est3Total;
+  float est4Total;
+  float est5Total;
+  float est6Total;
 
   cInterfaz.parametros();
 
@@ -45,8 +51,8 @@ int main(void)
                   evento = 3;
               }
           }
-        //  cInterfaz.vistaSimulacion(cSimulacion.Reloj, evento, cSimulacion.servidorOcupado, cSimulacion.unidadESOcupado,
-          //                cSimulacion.colaProcesosCPU.size(), cSimulacion.colaProcesosES.size(), i);
+          cInterfaz.vistaSimulacion(cSimulacion.Reloj, evento, cSimulacion.servidorOcupado, cSimulacion.unidadESOcupado,
+                        cSimulacion.colaProcesosCPU.size(), cSimulacion.colaProcesosES.size(), i);
 
       }// Cuando el reloj de la simulacion llega al limite, termina
       //Aqui debe hacer los calculos para los totales, usando los totales de cSimulacion
@@ -56,11 +62,18 @@ int main(void)
       float est4 = cSimulacion.tiempoES/cSimulacion.cantidadProcesos;
       float est5 = est1 - est2 - est4;
       float est6 = est5/est1;
-      cInterfaz.vistaFinal(est1,est2, est3, est4, est5, est6);
 
+      est1Total += est1;
+      est2Total += est2;
+      est3Total += est3;
+      est4Total += est4;
+      est5Total += est5;
+      est6Total += est6;
   }
+  cInterfaz.vistaFinal(est1Total/10,est2Total/10, est3Total/10, est4Total/10, est5Total/10, est6Total/10);
   // LLama a Vista Final para reportar los ultimos datos cuando todas las simulaciones finalicen
-  
+
+
 
   return 0;
 }
